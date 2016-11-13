@@ -13,7 +13,6 @@ import com.google.gson.Gson;
 
 import br.cefet.p4.collection.ColecaoCidade;
 import br.cefet.p4.collection.bdr.ColecaoCidadeEmBDR;
-import br.cefet.p4.collection.bdr.ColecaoClienteEmBDR;
 import br.cefet.p4.collection.bdr.FabricaConexao;
 
 /**
@@ -38,7 +37,7 @@ public class CidadeServlet extends HttpServlet {
 			e.printStackTrace();
 			return;
 		}
-        ColecaoCidade colecaoCidade = new ColecaoCidadeEmBDR( conexao );
+		colecaoCidade = new ColecaoCidadeEmBDR( conexao );
     }
 
 	/**
@@ -47,10 +46,10 @@ public class CidadeServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String conteudo;
 		try {
-			conteudo = ( new Gson() ).toJson( colecaoCidade.todos()  );
+			conteudo = ( new Gson() ).toJson( colecaoCidade.todos()  );			
 		} catch ( Exception e ) {
 			response.setStatus( 400 );
-			conteudo = "[ \"Erro ao carregar as cidades.\"  ]";
+			conteudo = "[ \"Erro ao carregar as cidades.\"  ]";			
 		}
 		sendJson( response, conteudo );
 	}
