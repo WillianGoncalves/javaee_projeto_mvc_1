@@ -27,6 +27,7 @@ public class ClienteServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	ColecaoCliente colecaoCliente;
+	ColecaoCidade colecaoCidade;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -41,7 +42,7 @@ public class ClienteServlet extends HttpServlet {
 			e.printStackTrace();
 			return;
 		}
-        ColecaoCidade colecaoCidade = new ColecaoCidadeEmBDR( conexao );
+        colecaoCidade = new ColecaoCidadeEmBDR( conexao );
         colecaoCliente = new ColecaoClienteEmBDR(
         		conexao, colecaoCidade );
     }
@@ -71,6 +72,38 @@ public class ClienteServlet extends HttpServlet {
 		// 3. criar cliente com id 0, nome recebido e objeto de cidade
 		// 4. usar coleção de cliente para cadastrar o cliente
 		// 5. enviar resposta para o cliente
+		
+		String conteudo = "";
+		
+		try {
+			
+			String nome = (String) request.getParameter("nome");
+			
+			if(nome == null || nome == ""){
+				throw new Exception("Nome não informado.");
+			}
+			
+			int cidadeId = Integer.parseInt(request.getParameter("cidade"));
+			
+			Cidade cidade = colecaoCidade.comId(cidadeId);
+			Cliente cliente = new Cliente(0, nome, cidade);
+			
+			colecaoCliente.adicionar(cliente);
+						
+			response.setStatus(200);
+			conteudo = "[ \"Cliente criado.\" ]";
+			
+		} catch (ColecaoException e) {
+			
+			response.setStatus(400);
+			conteudo = "[ \"Erro ao criar cliente.\" ]";
+			
+		} catch(Exception e){
+			
+			response.setStatus(400);
+			conteudo = "[ \"" + e.getMessage() + "\" ]";			
+		}
+		sendJson(response, conteudo);
 	}
 	
 	/**

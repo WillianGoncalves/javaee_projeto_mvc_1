@@ -61,7 +61,20 @@ public class ColecaoClienteEmBDR implements ColecaoCliente {
 
 	@Override
 	public void adicionar(Cliente c) throws ColecaoException {
-		// TODO Auto-generated method stub
+		String sql = "INSERT INTO cliente(nome, cidade_id) VALUES(?, ?)";
+		
+		try {
+			
+			PreparedStatement st = conexao.prepareStatement(sql);
+			
+			st.setString(1, c.getNome());
+			st.setLong(2, c.getCidade().getId());
+			
+			st.execute();
+			
+		} catch (SQLException e) {
+			throw new ColecaoException( e );
+		}		
 		
 	}
 
