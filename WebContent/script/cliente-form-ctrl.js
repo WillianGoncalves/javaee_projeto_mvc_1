@@ -1,48 +1,59 @@
-( function( app ) {
-	'use strict';
+(function(app) {
+    'use strict';
 
-	/**
-	 * Controladora de Formulário de Clientes
-	 */
-	function ControladoraFormCliente( servicoClientes, servicoCidades, $, toastr ) {
+    /**
+     * Controladora de Formulário de Clientes
+     */
+    function ControladoraFormCliente(servicoClientes, servicoCidades, $, toastr) {
 
-		var mostrarErro = function mostrarErro( jqXhr ) {
-			toastr.error( jqXhr.responseJSON.join( ", ") );
-		};
+        var mostrarErro = function mostrarErro(jqXhr) {
+            toastr.error(jqXhr.responseJSON.join(", "));
+        };
 
-		var mostrarSucesso = function mostrarSucesso( data ) {
-			toastr.success( data.join( ", " ) );
-		};
+        var mostrarSucesso = function mostrarSucesso(data) {
+            toastr.success(data.join(", "));
+        };
 
-		var registrarCliqueBotoes = function registrarCliqueBotoes() {
-		};
+        var registrarCliqueBotoes = function registrarCliqueBotoes() {
+					$("#salvar").click(salvarCliente);
+				};
 
-		var idSelecionado = function idSelecionado() {
-			return parseInt( $( '#clientes tbody .cor-linha :first' ).html() );
-		};
+        var idSelecionado = function idSelecionado() {
+            return parseInt($('#clientes tbody .cor-linha :first').html());
+        };
 
-		var listarCidades = function listarcidades(data) {
-			console.log("listando cidades");
-			var html = '';
+        var listarCidades = function listarcidades(data) {
+            console.log("listando cidades");
+            var html = '';
 
-			for ( var i in data) {
-				var cidade = data[i];
+            for (var i in data) {
+                var cidade = data[i];
 
-				html += "<option value=" + cidade.id + ">" + cidade.nome + "</option>";
-			}
+                html += "<option value=" + cidade.id + ">" + cidade.nome + "</option>";
+            }
 
-			$('#cidade').html(html);
-		};
+            $('#cidade').html(html);
+        };
 
-		this.configurar = function configurar() {
-			registrarCliqueBotoes();
+				var salvarCliente = function salvarCliente(e){
+					e.preventDefault();
 
-			var promessa = servicoCidades.cidades();
-			promessa.done(listarCidades);
-			promessa.fail(mostrarErro);
-		};
-	}
+					var serializedData = $("#cliente_form").serialize();
+					var promessa = servicoClientes.salvar(serializedData);
 
-	app.ControladoraFormCliente = ControladoraFormCliente;
+					promessa.done(mostrarSucesso);
+					promessa.fail(mostrarErro);
+				}
 
-} )( app );
+        this.configurar = function configurar() {
+            registrarCliqueBotoes();
+
+            var promessa = servicoCidades.cidades();
+            promessa.done(listarCidades);
+            promessa.fail(mostrarErro);
+        };
+    }
+
+    app.ControladoraFormCliente = ControladoraFormCliente;
+
+})(app);
