@@ -4,8 +4,7 @@
 	/**
 	 * Controladora de Listagem de Clientes
 	 */
-	function ControladoraListagemClientes(servicoClientes, $, toastr, router,
-			window) {
+	function ControladoraListagemClientes(servicoClientes, $,	toastr, router, window) {
 
 		var listarClientes = function listarClientes(data) {
 			var tbody = $('#clientes tbody');
@@ -19,17 +18,6 @@
 
 			registrarCliqueEmLinhas();
 		};
-
-		/*var listarCidades = function listarcidades(data) {
-			var combobox = $('#cidade');
-			combobox.empty();
-			for ( var i in data) {
-				var cidade = data[i];
-				combobox.append(
-					'<option value="' + cidade.id + '">' + cidade.nome + '</option>'
-				);
-			}
-		}*/
 
 		var mostrarErro = function mostrarErro(jqXhr) {
 			toastr.error(jqXhr.responseJSON.join(", "));
@@ -96,7 +84,7 @@
 			registrarCliqueBotoes();
 		};
 	}
-
+	
 	app.ControladoraListagemClientes = ControladoraListagemClientes;
 
 })(app);
